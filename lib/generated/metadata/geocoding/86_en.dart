@@ -4,20 +4,31 @@
 
 
 import 'cn/fixed_line_en.dart';
-import 'cn/phone_location_en_8613.dart';
-import 'cn/phone_location_en_8615.dart';
-import 'cn/phone_location_en_8617.dart';
-import 'cn/phone_location_en_8618.dart';
+
+import 'cn/phone_location_en_86130_86134.dart';
+import 'cn/phone_location_en_86135_86139.dart';
+import 'cn/phone_location_en_8614.dart';
+import 'cn/phone_location_en_86150_86153.dart';
+import 'cn/phone_location_en_86155_86159.dart';
+import 'cn/phone_location_en_86170_86174.dart';
+import 'cn/phone_location_en_86175_86178.dart';
+import 'cn/phone_location_en_86180_86184.dart';
+import 'cn/phone_location_en_86185_86189.dart';
 import 'cn/phone_location_en_8619.dart';
 
 /// Geocoding JSON data for 86_en
 Map<int, String> get86_en() {
   return {
 ...getFixedLineCodes_en(),
-...get86_8613_en(),
-...get86_8615_en(),
-...get86_8617_en(),
-...get86_8618_en(),
-...get86_8619_en()
+...get86130_86134_en(),
+...get86135_86139_en(),
+...get8614_en(),
+...get86150_86153_en(),
+...get86155_86159_en(),
+...get86170_86174_en(),
+...get86175_86178_en(),
+...get86180_86184_en(),
+...get86185_86189_en(),
+...get8619_en()
           };
 }

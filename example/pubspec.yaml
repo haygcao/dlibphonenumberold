@@ -1,0 +1,21 @@
+name: phone_number_example
+description: Demonstrates how to use the call_log plugin.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  dlibphonenumber:
+    path: ../
+
+flutter:
+  uses-material-design: true

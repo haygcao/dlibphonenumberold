@@ -4,20 +4,32 @@
 
 
 import 'cn/fixed_line_zh.dart';
-import 'cn/phone_location_zh_8613.dart';
-import 'cn/phone_location_zh_8615.dart';
-import 'cn/phone_location_zh_8617.dart';
-import 'cn/phone_location_zh_8618.dart';
+
+import 'cn/phone_location_zh_86130_86134.dart';
+import 'cn/phone_location_zh_86135_86139.dart';
+import 'cn/phone_location_zh_8614.dart';
+import 'cn/phone_location_zh_86150_86153.dart';
+import 'cn/phone_location_zh_86155_86159.dart';
+import 'cn/phone_location_zh_86170_86174.dart';
+import 'cn/phone_location_zh_86175_86178.dart';
+import 'cn/phone_location_zh_86180_86184.dart';
+import 'cn/phone_location_zh_86185_86189.dart';
 import 'cn/phone_location_zh_8619.dart';
 
 /// Geocoding JSON data for 86_zh
 Map<int, String> get86_zh() {
   return {
 ...getFixedLineCodes_zh(),
-...get86_8613_zh(),
-...get86_8615_zh(),
-...get86_8617_zh(),
-...get86_8618_zh(),
-...get86_8619_zh()
+...get86130_86134_zh(),
+...get86135_86139_zh(),
+...get8614_zh(),
+...get86150_86153_zh(),
+...get86155_86159_zh(),
+...get86170_86174_zh(),
+...get86175_86178_zh(),
+...get86180_86184_zh(),
+...get86185_86189_zh(),
+...get8619_zh()
+
           };
 }
