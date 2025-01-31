@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2009-2024 The Libphonenumber Authors
+// Copyright (C) 2009-2025 The Libphonenumber Authors
 //
 // Licensed under the Apache License, Version 2.0 (the 'License');
 // you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ class TimezoneMetadataMap {
       66: "Asia/Bangkok",
       77: "Asia/Almaty&Asia/Aqtobe",
       79: "Europe/Moscow",
-      81: "Asia/Shanghai",
+      81: "Asia/Tokyo",
       82: "Asia/Seoul",
       84: "Asia/Ho_Chi_Minh",
       86: "Asia/Shanghai",
@@ -2704,7 +2704,22 @@ class TimezoneMetadataMap {
       1907929: "America/Juneau",
       1907966: "America/Juneau",
       1907983: "America/Juneau",
-      1928688: "America/Denver&America/Phoenix",
+      1928283: "America/Denver&America/Phoenix",
+      1928672: "America/Denver&America/Phoenix",
+      1928673: "America/Denver&America/Phoenix",
+      1928674: "America/Denver&America/Phoenix",
+      1928677: "America/Denver&America/Phoenix",
+      1928686: "America/Denver&America/Phoenix",
+      1928697: "America/Denver&America/Phoenix",
+      1928698: "America/Denver&America/Phoenix",
+      1928724: "America/Denver&America/Phoenix",
+      1928725: "America/Denver&America/Phoenix",
+      1928728: "America/Denver&America/Phoenix",
+      1928729: "America/Denver&America/Phoenix",
+      1928755: "America/Denver&America/Phoenix",
+      1928781: "America/Denver&America/Phoenix",
+      1928787: "America/Denver&America/Phoenix",
+      1928871: "America/Denver&America/Phoenix",
       2627092: "Indian/Reunion",
       2627093: "Indian/Mayotte",
       2629398: "Indian/Mayotte",
@@ -2841,7 +2856,6 @@ class TimezoneMetadataMap {
       6185129: "Australia/Adelaide&Australia/Perth",
       6189162: "Indian/Cocos",
       6189164: "Indian/Christmas",
-      8170859: "Asia/Shanghai",
       9761362: "Asia/Choibalsan&Asia/Ulaanbaatar",
       9762362: "Asia/Choibalsan&Asia/Ulaanbaatar",
       55553682: "America/Manaus",

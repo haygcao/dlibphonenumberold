@@ -884,6 +884,14 @@ void main() {
               alphaNumericNumber, 'BS'),
           '1 800 SIX-FLAG');
 
+      // Testing a number with extension.
+      PhoneNumber alphaNumericNumberWithExtn =
+          phoneUtil.parseAndKeepRawInput("800 SIX-flag ext. 1234", 'US');
+      expect(
+          phoneUtil.formatOutOfCountryKeepingAlphaChars(
+              alphaNumericNumberWithExtn, 'AU'),
+          "0011 1 800 SIX-FLAG extn. 1234");
+
       // Testing that if the raw input doesn't exist, it is formatted using
       // formatOutOfCountryCallingNumber.
       alphaNumericNumber.clearRawInput();

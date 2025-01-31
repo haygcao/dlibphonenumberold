@@ -1078,14 +1078,14 @@ class PhoneNumberUtil {
   /// [number] the phone number to be formatted.
   /// [numberFormat] the format the phone number should be formatted into.
   String format(PhoneNumber number, PhoneNumberFormat numberFormat) {
-    if (number.nationalNumber == 0 && number.hasRawInput()) {
+    if (number.nationalNumber == 0) {
       // Unparseable numbers that kept their raw input just use that.
       // This is the only case where a number can be formatted as E164 without a
       // leading '+' symbol (but the original number wasn't parseable anyway).
-      // TODO: Consider removing the 'if' above so that unparseable strings
-      // without raw input format to the empty string instead of '+00'
       String rawInput = number.rawInput;
-      if (rawInput.isNotEmpty) return rawInput;
+      if (rawInput.isNotEmpty || !number.hasCountryCode()) {
+        return rawInput;
+      }
     }
 
     int countryCallingCode = number.countryCode;
@@ -1769,14 +1769,26 @@ class PhoneNumberUtil {
     PhoneMetadata metadataForRegion =
         _getMetadataForRegionOrCallingCode(countryCode, regionCode)!;
 
-    String formattedExtension = _maybeGetFormattedExtension(
+    StringBuffer formattedNumber = StringBuffer(rawInput);
+
+    // Strip any extension
+    maybeStripExtension(formattedNumber);
+
+    // Append the formatted extension
+    _maybeGetFormattedExtension(
       number,
       metadataForRegion,
       PhoneNumberFormat.international,
+      formattedNumber,
     );
 
     if (internationalPrefixForFormatting.isNotEmpty) {
-      return '$internationalPrefixForFormatting $countryCode $rawInput$formattedExtension';
+      final String formattedNumberString = formattedNumber.toString();
+      formattedNumber
+        ..clear()
+        ..write(
+            '$internationalPrefixForFormatting $countryCode $formattedNumberString');
+      return formattedNumber.toString();
     } else {
       // Invalid region entered as country-calling-from (so no metadata was found
       // for it) or the region chosen has multiple international dialling
@@ -1785,7 +1797,7 @@ class PhoneNumberUtil {
         countryCode,
         PhoneNumberFormat.international,
         rawInput,
-        formattedExtension,
+        '',
       );
     }
   }
@@ -2069,17 +2081,22 @@ class PhoneNumberUtil {
   String _maybeGetFormattedExtension(
     PhoneNumber number,
     PhoneMetadata metadata,
-    PhoneNumberFormat numberFormat,
-  ) {
+    PhoneNumberFormat numberFormat, [
+    StringBuffer? formattedNumber,
+  ]) {
     if (!number.hasExtension_3() || number.extension_3.isEmpty) {
       return '';
     } else {
       if (numberFormat == PhoneNumberFormat.rfc3966) {
+        formattedNumber?.write('$_rfc3966ExtnPrefix${number.extension_3}');
         return '$_rfc3966ExtnPrefix${number.extension_3}';
       } else {
         if (metadata.hasPreferredExtnPrefix()) {
-          return metadata.preferredExtnPrefix + number.extension_3;
+          formattedNumber
+              ?.write('${metadata.preferredExtnPrefix}${number.extension_3}');
+          return '${metadata.preferredExtnPrefix}${number.extension_3}';
         } else {
+          formattedNumber?.write('$_defaultExtnPrefix${number.extension_3}');
           return '$_defaultExtnPrefix${number.extension_3}';
         }
       }
@@ -2571,26 +2588,32 @@ class PhoneNumberUtil {
         : ValidationResult.invalidLength;
   }
 
-  /// Check whether a phone number is a possible number. It provides a more lenient
-  /// check than [isValidNumber] in the following sense:
+  /// Check whether a phone number is a possible number. It provides a more lenient check than
+  /// [isValidNumber] in the following sense:
+  /// <ol>
+  ///   <li> It only checks the length of phone numbers. In particular, it doesn't check starting
+  ///        digits of the number.
+  ///   <li> It doesn't attempt to figure out the type of the number, but uses general rules which
+  ///        applies to all types of phone numbers in a region. Therefore, it is much faster than
+  ///        isValidNumber.
+  ///   <li> For some numbers (particularly fixed-line), many regions have the concept of area code,
+  ///        which together with subscriber number constitute the national significant number. It is
+  ///        sometimes okay to dial only the subscriber number when dialing in the same area. This
+  ///        function will return [isPossibleLocalOnly] if the subscriber-number-only version is
+  ///        passed in. On the other hand, because isValidNumber validates using information on both
+  ///        starting digits (for fixed line numbers, that would most likely be area codes) and
+  ///        length (obviously includes the length of area codes for fixed line numbers), it will
+  ///        return false for the subscriber-number-only version.
+  /// </ol>
   ///
-  /// <li>It only checks the length of phone numbers. In particular, it doesn't
-  /// check starting digits of the number.
-  /// <li>It doesn't attempt to figure out the type of the number, but uses general
-  /// rules which applies to all types of phone numbers in a region. Therefore, it
-  /// is much faster than isValidNumber.
-  /// <li>For some numbers (particularly fixed-line), many regions have the concept
-  /// of area code, which together with subscriber number constitute the national
-  /// significant number.  It is sometimes okay to dial only the subscriber number
-  /// when dialing in the same area. This function will return
-  /// [isPossibleLocalOnly] if the subscriber-number-only version is passed in. On
-  /// the other hand, because isValidNumber validates using information on both
-  /// starting digits (for fixed line numbers, that would most likely be area
-  /// codes) and length (obviously includes the length of area codes for fixed line
-  /// numbers), it will return false for the subscriber-number-only version.
-  /// [number] the number that needs to be checked
-  /// [isPossibleNumberWithReason] returns a ValidationResult object which indicates
-  ///  whether the number is possible
+  /// <p>There is a known <a href="https://issuetracker.google.com/issues/335892662">issue</a> with this
+  /// method: if a number is possible only in a certain region among several regions that share the
+  /// same country calling code, this method will consider only the "main" region. For example,
+  /// +1310xxxx are valid numbers in Canada. However, they are not possible in the US. As a result,
+  /// this method will return [isPossibleLocalOnly] for +1310xxxx.
+  ///
+  /// @param [number]  the number that needs to be checked
+  /// @return a [ValidationResult] object which indicates whether the number is possible.
   ValidationResult isPossibleNumberWithReason(PhoneNumber number) {
     return isPossibleNumberForTypeWithReason(number, PhoneNumberType.unknown);
   }
